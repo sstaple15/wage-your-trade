@@ -1,137 +1,56 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html lang = 'en'>
 
-.counties {
-  fill: none;
-}
+<head>
+  <meta charset="utf-8">
+  <title>Wage Your Trade War</title>
+  <link rel='stylesheet' href='./style.css' />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
 
-.counties:hover {
-  opacity: 0.5;
-}
+<body>
+  <!-- intro -->
+  <div class = 'container'>
+    <h1 class = 'title'>Wage Your Trade War</h1>
+    <p class = 'text'>Using data from the American Industry Survey and estimates from the Brookings Institute, this interactive summarizes the jobs that may be lost due to the US-China trade war, separated by county and industry.</p1>
+    <div class = 'row menubar'>
+      <input id='searchbar' text='text' placeholder="Search counties...">
+      <div class='dropdown'>
+        <button class='btn btn-primary dropdown-toggle' type='button' id='dropdownMenuButton'
+                data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                Industry
+        </button>
+        <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+          <a class='dropdown-item' href='#agr' onclick=reanimate(agr)>agr</a>
+          <a class='dropdown-item' href='#min' onclick=reanimate(min)>min</a>
+          <a class='dropdown-item' href='#man' onclick=reanimate(man)>man</a>
+          <a class='dropdown-item' href='#bus' onclick=reanimate(bus)>bus</a>
+          <a class='dropdown-item' href='#fin' onclick=reanimate(fin)>fin</a>
+          <a class='dropdown-item' href='#eng' onclick=reanimate(eng)>eng</a>
+          <a class='dropdown-item' href='#ite' onclick=reanimate(ite)>ite</a>
+          <a class='dropdown-item' href='#eds' onclick=reanimate(eds)>eds</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-.active {
-  stroke: grey;
-  stroke-width:2;
-  fill:none;
-  pointer-events: all;
-}
-
-.states {
-  fill: none;
-  stroke: #fff;
-  stroke-linejoin: round;
-}
-
-</style>
+</body>
 
 <svg width="960" height="600"></svg>
+
+<!-- d3 links -->
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  crossorigin="anonymous"></script>
 
-<script>
+<!-- contents -->
+<script src='choropleth.js'> </script>
+<script src='scalebar.js'></script>
+<script src='global.js'></script>
 
-var promises = [
-  "https://d3js.org/us-10m.v1.json",
-  "cty_comb.json"
-]
-
-Promise.all(promises.map(url => fetch(url)
-  .then(data => data.json())))
-  .then(data => ready(data));
-
-function computeDomain(data, key) {
-  return data.reduce((acc, row) => {
-    return {
-      min: Math.min(acc.min, row[key]),
-      max: Math.max(acc.max, row[key])
-    };
-  }, {min: Infinity, max: -Infinity});
-}
-
-function ready(data) {
-  const [us, cty_comb] = data;
-
-  const jobDomain = computeDomain(cty_comb, "dir_jobs");
-  var cty_jobs = cty_comb.reduce((acc, row) => {
-    acc[row.id] = row.dir_jobs;
-    return acc;
-  }, {});
-
-  const jobScale = d3.scaleLinear().domain([0, jobDomain.max]).range([0,1])
-  const colorScale = d => d3.interpolateYlGnBu(Math.sqrt(Math.sqrt(jobScale(d))));
-
-  svg.append("g")
-    .attr("class", "counties")
-    .on('mouseover', function(d) {
-      d3.select(this).classed('active', true)
-    })
-    .on('mouseout', function(d) {
-      d3.select(this).classed('active', false)
-    })
-    .selectAll("path")
-    .data(topojson.feature(us, us.objects.counties).features)
-    .enter().append("path")
-    .attr("fill", d => colorScale(cty_jobs[d.id]))
-    .attr("d", path)
-    .append("title")
-      .text(function(d) { return Math.round(cty_jobs[d.id]) + ' jobs'; });
-
-  svg.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("class", "states")
-      .attr("d", path);
-}
-
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
-
-var cty_comb = d3.map();
-var path = d3.geoPath();
-
-var x = d3.scaleLinear()
-    .domain([0, 10])
-    .rangeRound([600, 860]);
-
-var color = d3.scaleThreshold()
-    .domain(d3.range(1, 10))
-    .range(['#fff', '#ffffd9', '#edf8b1', '#c7e9b4',
-            '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8',
-            '#253494', '#081d58']);
-
-var g = svg.append("g")
-    .attr("class", "key")
-    .attr("transform", "translate(0,40)");
-
-g.selectAll("rect")
-  .data(color.range().map(function(d) {
-      d = color.invertExtent(d);
-      if (d[0] == null) d[0] = x.domain()[0];
-      if (d[1] == null) d[1] = x.domain()[1];
-      return d;
-    }))
-  .enter().append("rect")
-    .attr("height", 8)
-    .attr("x", function(d) { return x(d[0]); })
-    .attr("width", function(d) { return x(d[1]) - x(d[0]); })
-    .attr("fill", function(d) { return color(d[0]); });
-
-g.append("text")
-    .attr("class", "caption")
-    .attr("x", x.range()[0])
-    .attr("y", -6)
-    .attr("fill", "#000")
-    .attr("text-anchor", "start")
-    .attr("font-weight", "bold")
-    .text("Jobs Supported (thousands)");
-
-g.call(d3.axisBottom(x)
-    .tickSize(13)
-    .tickFormat(function(x, i) { return i ? x*30 : x*30; })
-    .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-  .select(".domain")
-    .remove();
-
-</script>
+</html>
