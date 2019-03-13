@@ -4,7 +4,8 @@
   name="viewport"
   content="width=device-width, initial-scale=1, shrink-to-fit=no"
 />
-<title>Slidebar template</title>
+<title>slider template</title>
+
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
 
@@ -14,106 +15,33 @@
 />
 
 <div class="container">
-  <h1>Slidebar Template</h1>
-  <h2>Jobs Affected by Tariff Rate</h2>
-  <h3>Agriculture</h3>
-  <div class="row align-items-center">
-    <div class="col-sm"><div id="slider-template"></div></div>
+  <h1>Slidebar template</h1>
+  <h2>Agriculture</h2>
+  <div class="row align-items-right">
+    <div class="col-sm"><div id="slider-step"></div></div>
   </div>
 </div>
 
 <script>
-
 // adapted from https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
-// New York Times
-var width = 350;
-var height = 100;
-var margin = { top: 20, right: 10, bottom: 40, left: 10 };
+  var data = [0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
+  var sliderStep = d3.sliderBottom()
+    .min(d3.min(data))
+    .max(d3.max(data))
+    .width(200)
+    .tickFormat(d3.format('1.0%'))
+    .ticks(4)
+    .step(0.05)
+    .default(0.25);
 
-var data = d3.range(0, 101).map(d => ({
-  year: d,
-  value: 1 * Math.exp((d - 1) / 40),
-}));
+  var gStep = d3
+    .select('div#slider-step')
+    .append('svg')
+    .attr('width', 250)
+    .attr('height', 75)
+    .append('g')
+    .attr('transform', 'translate(25,25)');
 
-var svg = d3
-  .select('div')
-  .append('svg')
-  .attr('width', width)
-  .attr('height', height);
-
-var padding = 0.1;
-
-var xBand = d3
-  .scaleBand()
-  .domain(data.map(d => d.year))
-  .range([margin.left, width - margin.right])
-  .padding(padding);
-
-var xLinear = d3
-  .scaleLinear()
-  .domain([
-    d3.min(data, d => d.year),
-    d3.max(data, d => d.year),
-  ])
-  .range([
-    margin.left + xBand.bandwidth() / 2 + xBand.step() * padding - 0.5,
-    width -
-      margin.right -
-      xBand.bandwidth() / 2 -
-      xBand.step() * padding -
-      0.5,
-  ]);
-
-var y = d3
-  .scaleLinear()
-  .domain([0, d3.max(data, d => d.value)])
-  .nice()
-  .range([height - margin.bottom, margin.top]);
-
-var yAxis = g =>
-  g
-    .attr('transform', `translate(${width - margin.right},0)`)
-    .call(
-      d3
-        .axisRight(y)
-        .tickValues([1e4])
-        .tickFormat(d3.format('($.2s'))
-    )
-    .call(g => g.select('.domain').remove());
-
-var slider = g =>
-  g.attr('transform', `translate(0,${height - margin.bottom})`).call(
-    d3
-      .sliderBottom(xLinear)
-      .step(5)
-      .ticks(5)
-      .default(25)
-      .on('onchange', value => draw(value))
-  );
-
-var bars = svg
-  .append('g')
-  .selectAll('rect')
-  .data(data);
-
-var barsEnter = bars
-  .enter()
-  .append('rect')
-  .attr('x', d => xBand(d.year))
-  .attr('y', d => y(d.value))
-  .attr('height', d => y(0) - y(d.value))
-  .attr('width', xBand.bandwidth());
-
-svg.append('g').call(yAxis);
-svg.append('g').call(slider);
-
-var draw = selected => {
-  barsEnter
-    .merge(bars)
-    .attr('fill', d => (d.year === selected ? '#000' : '#e0e0e0'));
-
-};
-
-draw(25);
+  gStep.call(sliderStep);
 
 </script>
