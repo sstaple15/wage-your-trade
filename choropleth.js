@@ -1,20 +1,23 @@
-// adapted from https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
-async function choropleth(data) {
-  const [us, cty_stuff] = data;
+function set_choropleth(geoJSON) {
+  var path = d3.geoPath();
+  // adapted from https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
+  svg.append("g")
+    .attr("class", "counties")
+    .selectAll("path")
+    .data(topojson.feature(geoJSON, geoJSON.objects.counties).features)
+    .enter().append("path")
+    .attr("d", path);
+    // .append("title");
 
+  svg.append("path")
+      .datum(topojson.mesh(geoJSON, geoJSON.objects.states, function(a, b) { return a !== b; }))
+      .attr("class", "states")
+      .attr("d", path);
+}
+
+function update_choropleth (cty_jobs) {
   // create linear and color scales for choropleth
-  const jobDomain = computeDomain(cty_stuff, "ag_jobs");
-  var cty_jobs = cty_stuff.reduce((acc, d) => {
-    acc[d.id] = { 'agr' : d.ag_jobs,
-                  'man' : d.man_jobs,
-                  'min' : d.min_jobs,
-                  'edu' : d.ed_jobs,
-                  'eng' : d.eng_jobs,
-                  'bus' : d.bus_jobs,
-                  'its' : d.it_jobs,
-                  'fin' : d.fin_jobs };
-    return acc;
-  });
+  const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
   const jobScale = d3.scaleLinear().domain([0, jobDomain.max]).range([0,1])
   const colorScale = d => d3.interpolateYlGnBu(jobScale(d));
 
@@ -24,36 +27,29 @@ async function choropleth(data) {
       .offset([-10, 0])
       .direction('n')
       .html(function (d) {
-        text = 'Supported Jobs Rate: ' + Math.round(cty_jobs[d.id].agr);
+        text = cty_jobs[d.id].cty + '<br/>Supported Jobs Rate: ' + d3.format(',')(Math.round(cty_jobs[d.id][CURRENT_MET]));
         return text;
   });
   svg.call(tip);
 
-  // adapted from https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
-  svg.append("g")
-    .attr("class", "counties")
-    .selectAll("path")
-    .data(topojson.feature(us, us.objects.counties).features)
-    .enter().append("path")
+  d3.selectAll('path')
     .on('mouseover', function(d) {
       tip.show(d, this);
-      d3.select(this).classed('active', true)
+      d3.select(this)
+        .classed('active', true);
     })
     .on('mouseout', function(d) {
       tip.hide(d, this);
-      d3.select(this).classed('active', false)
+      d3.select(this)
+        .classed('active', false);
     })
     .attr("fill", (d) => {
       try {
-        colorValue = colorScale(cty_jobs[d.id].agr);
-      } catch {}
+        colorValue = colorScale(cty_jobs[d.id][CURRENT_MET]);
+      } catch {
+          return colorScale(0);
+      }
       return colorValue;
     })
-    .attr("d", path);
-    // .append("title");
 
-  svg.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("class", "states")
-      .attr("d", path);
 }

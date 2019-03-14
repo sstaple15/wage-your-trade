@@ -1,26 +1,69 @@
-var promises = [
-  d3.json("https://d3js.org/us-10m.v1.json"),
-  d3.json("cty_stuff.json")
-];
-Promise.all(promises)
-.then(data => choropleth(data));
+// exclusively to create a first rendition
+promise = new Promise((resolve) => {
+  data = d3.json("https://d3js.org/us-10m.v1.json");
+  resolve(data);
+})
+
+promise
+.then((geoJSON) => {
+  set_choropleth(geoJSON);
+  data = d3.json("cty_stuff.json");
+  return data;
+})
+.then(data => reformat(data))
+.then(data => update_choropleth(data));
+
+// update cycle
+function update_scalars (value) {
+  SC_AGR = value
+  let promise = new Promise((resolve) => {
+    data = d3.json("cty_stuff.json");
+    resolve(data);
+  });
+  promise
+  .then(data => reformat(data))
+  .then(data => update_choropleth(data));
+}
+
+// global scalars to start
+var SC = 0.25;
+var SC_AGR = 0.25;
+var CURRENT_MET = 'ind';
+
+// misc functions
+function reformat (data) {
+  return data.reduce((acc, d) => {
+    acc[d.id] = { 'cty' : d.cty_name,
+                  'agr' : d.ag_jobs,
+                  'man' : d.man_jobs,
+                  'min' : d.min_jobs,
+                  'edu' : d.ed_jobs,
+                  'eng' : d.eng_jobs,
+                  'bus' : d.bus_jobs,
+                  'its' : d.it_jobs,
+                  'fin' : d.fin_jobs,
+                  'ind' : (SC_AGR*d.ag_jobs + SC*d.man_jobs + SC*d.min_jobs + SC*d.ed_jobs +
+                          SC*d.eng_jobs + SC*d.bus_jobs + SC*d.it_jobs + SC*d.fin_jobs)
+                };
+    return acc;
+  });
+}
 
 function computeDomain(data, key) {
-  return data.reduce((acc, row) => {
-    return {
-      min: Math.min(acc.min, row[key]),
-      max: Math.max(acc.max, row[key])
-    };
-  }, {min: Infinity, max: -Infinity});
+  min = d3.min(Object.values(data), function (d) {
+    return d[key];
+  });
+  max = d3.max(Object.values(data), function (d) {
+    return d[key];
+  });
+  return {min: min, max: max};
 }
 
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
-var cty_stuff = d3.map();
-var path = d3.geoPath();
-
+//scalebar
 var x = d3.scaleLinear()
     .domain([0, 10])
     .rangeRound([600, 860]);

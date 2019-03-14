@@ -10,20 +10,64 @@
 </head>
 
 <body>
-  <!-- intro -->
-  <div class = 'container'>
-    <h1 class = 'title'>Wage Your Trade War</h1>
-    <p class = 'text'>Using data from the American Industry Survey and estimates from the Brookings Institute, this interactive summarizes the jobs that may be lost due to the US-China trade war, separated by county and industry.</p1>
-    <div class = 'row menubar'>
-      <input id='searchbar' text='text' placeholder="Search counties...">
+  <div class = 'container-fluid' style = 'max-width:1200px'>
+    <div class = 'row'>
+      <div class = 'col-6'>
+        <div class = 'row'>
+          <h1 class = 'title'>Wage Your Trade War</h1>
+          <p class = 'text'>Using data from the American Industry Survey and estimates from the Brookings Institute, this interactive summarizes the jobs that may be lost due to the US-China trade war, separated by county and industry.</p1>
+        </div>
+        <div class = 'row'>
+          <input id='searchbar' text='text' placeholder="Search counties...">
+        </div>
+      </div>
+      <div class = 'col'>
+        <h1 class = 'text'>This will be a histogram</h1>
+      </div>
+    </div>
+    <div class = 'row'>
+      <div class = 'col-*-11'>
+        <svg width="960" height="600"></svg>
+      </div>
+      <div class = 'col'>
+        <div class="row">
+          <h6>Agriculture, Forestry, & Fishing</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>Mining, Oil, & Gas</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>All Manufacturing</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>General Business Services</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>Finance & Insurance</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>Information & Technology</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>Education, Medicine, & Tourism</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+        <div class="row">
+          <h6>Engineering & Heavy Industry</h6>
+          <input type='range' min='0' max='1' onmouseup='update_scalars(this.value)' step='.05'>
+        </div>
+      </div>
     </div>
   </div>
 
-</body>
-
-<svg width="960" height="600"></svg>
-
 <!-- d3 links -->
+<script src="https://unpkg.com/d3-simple-slider"></script>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
@@ -34,7 +78,8 @@
 
 <!-- contents -->
 <script src='choropleth.js'> </script>
-<!-- <script src='scalebar.js'></script> -->
 <script src='global.js'></script>
+
+</body>
 
 </html>

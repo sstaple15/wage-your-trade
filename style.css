@@ -1,3 +1,14 @@
+.slider-selection {
+	background: #BABABA;
+}
+
+.container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .counties {
   fill: none;
   stroke-width: 0.25;
