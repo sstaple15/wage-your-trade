@@ -15,7 +15,7 @@
       <div class = 'col-6'>
         <div class = 'row'>
           <h1 class = 'title'>Wage Your Trade War</h1>
-          <p class = 'text'>Using data from the American Industry Survey, Bureau of Labor Statistics, and estimates from the Brookings Institute, this interactive summarizes the jobs that may be lost due to the US-China trade war, separated by county and industry.</p1>
+          <p class = 'notbold'>Using data from the American Industry Survey, Bureau of Labor Statistics, and estimates from the Brookings Institute, this interactive summarizes the jobs that may be lost due to the US-China trade war, separated by county and industry.</p1>
         </div>
         <div class = 'row'>
           <input id='searchbar' autocomplete='on' text='text' placeholder="Search counties...">
@@ -31,41 +31,37 @@
       </div>
       <div class = 'col'>
         <div class="row-align-right">
-            <h1> <font size = '2.5'>Agriculture, Forestry, & Fishing</font></h1>
-            <div id="slider-step"></div>
-            <div id="slider"></div>
+            <h5>Play with Tariff Rates:</h5>
+            <p> <font size = '2.5'>Agriculture, Forestry, & Fishing</font></p>
+            <div id="slider_a"></div>
         </div>
-        <div class="row">
-          <h6>Agriculture, Forestry, & Fishing</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_AGR", this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>Mining, Oil, & Gas</font></p>
+            <div id="slider_b"></div>
         </div>
-        <div class="row">
-          <h6>Mining, Oil, & Gas</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_MIN", this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>All Manufacturing</font></p>
+            <div id="slider_c"></div>
         </div>
-        <div class="row">
-          <h6>All Manufacturing</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_MAN",this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>General Business Services</font></p>
+            <div id="slider_d"></div>
         </div>
-        <div class="row">
-          <h6>General Business Services</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_BUS",this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>Finance & Insurance</font></p>
+            <div id="slider_e"></div>
         </div>
-        <div class="row">
-          <h6>Finance & Insurance</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_FIN",this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>Information & Technology</font></p>
+            <div id="slider_f"></div>
         </div>
-        <div class="row">
-          <h6>Information & Technology</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_ITS",this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>Education, Medicine, & Tourism</font></p>
+            <div id="slider_g"></div>
         </div>
-        <div class="row">
-          <h6>Education, Medicine, & Tourism</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_EDU",this.value)' step='.05'>
-        </div>
-        <div class="row">
-          <h6>Engineering & Heavy Industry</h6>
-          <input type='range' min='0' max='1' onchange='update_scalars("SC_ENG",this.value)' step='.05'>
+        <div class="row-align-right">
+            <p> <font size = '2.5'>Engineering & Heavy Industry</font></p>
+            <div id="slider_h"></div>
         </div>
       </div>
     </div>

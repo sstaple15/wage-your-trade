@@ -26,14 +26,14 @@ function update_scalars (sc, value) {
 }
 
 // global scalars to start
-var SC_AGR = 0.2;
-var SC_MAN = 0.2;
-var SC_MIN = 0.2;
-var SC_EDU = 0.2;
-var SC_ENG = 0.2;
-var SC_BUS = 0.2;
-var SC_ITS = 0.2;
-var SC_FIN = 0.2;
+var SC_AGR = 0.30;
+var SC_MAN = 0.25;
+var SC_MIN = 0.05;
+var SC_EDU = 0;
+var SC_ENG = 0.20;
+var SC_BUS = 0;
+var SC_ITS = 0;
+var SC_FIN = 0;
 var CURRENT_MET = 'ind';
 
 // misc functions

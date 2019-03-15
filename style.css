@@ -3,6 +3,15 @@ body {
 	color: #555 !important;
 }
 
+p {
+	margin-bottom: 0 !important;
+	font-weight: bold;
+}
+
+.notbold {
+	font-weight: normal;
+}
+
 .background {
   fill: none;
   pointer-events: all;
