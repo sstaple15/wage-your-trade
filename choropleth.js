@@ -6,8 +6,8 @@ function set_choropleth(geoJSON) {
     .selectAll("path")
     .data(topojson.feature(geoJSON, geoJSON.objects.counties).features)
     .enter().append("path")
-    .attr("d", path);
-    // .append("title");
+    .attr("d", path)
+    .attr('class', 'feature');
 
   svg.append("path")
       .datum(topojson.mesh(geoJSON, geoJSON.objects.states, function(a, b) { return a !== b; }))
@@ -19,7 +19,7 @@ function update_choropleth (cty_jobs) {
   // create linear and color scales for choropleth
   const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
   const jobScale = d3.scaleLinear().domain([0, jobDomain.max]).range([0,1])
-  const colorScale = d => d3.interpolateYlGnBu(jobScale(d));
+  const colorScale = d => d3.interpolateYlGnBu(Math.sqrt(jobScale(d)));
 
   // create tooltip
   tip = d3.tip()
@@ -36,12 +36,12 @@ function update_choropleth (cty_jobs) {
     .on('mouseover', function(d) {
       tip.show(d, this);
       d3.select(this)
-        .classed('active', true);
+        .classed('counties active', true);
     })
     .on('mouseout', function(d) {
       tip.hide(d, this);
       d3.select(this)
-        .classed('active', false);
+        .classed('counties active', false);
     })
     .attr("fill", (d) => {
       try {

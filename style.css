@@ -1,3 +1,13 @@
+body {
+	background-color: #F9FFFA !important;
+	color: #555 !important;
+}
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
 .slider-selection {
 	background: #BABABA;
 }
@@ -16,6 +26,10 @@
 }
 
 .active {
+	opacity: 1;
+}
+
+.counties.active {
   stroke: grey;
   stroke-width:2;
   fill: white;
@@ -51,25 +65,6 @@
   margin: 6px 6px 6px 6px;
   border-radius: 4px;
   border: 2px solid #000;
-}
-
-.btn-primary {
-    border: 2px solid black;
-    margin-top: 6px;
-    margin-left: 6px;
-    background-color: #D3D3D3;
-}
-
-.btn-primary:hover {
-    background-color: #A9A9A9;
-}
-
-.bar {
-  opacity = 1;
-}
-
-.bar:hover {
-  opacity = 0.5;
 }
 
 text {
