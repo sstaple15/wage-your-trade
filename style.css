@@ -8,6 +8,10 @@ p {
 	font-weight: bold;
 }
 
+#hist {
+	display: flex;
+}
+
 .notbold {
 	font-weight: normal;
 }
@@ -54,7 +58,7 @@ p {
 
 .hovtip {
   font-family: 'Sarif';
-  line-heigt: 1;
+  line-height: 1.25;
   font-size: 12px;
   padding: 6px;
   background: #fff;

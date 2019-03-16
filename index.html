@@ -16,18 +16,20 @@
         <div class = 'row'>
           <h1 class = 'title'>Wage Your Trade War</h1>
           <p class = 'notbold'>Using data from the American Industry Survey, Bureau of Labor Statistics, and estimates from the Brookings Institute, this interactive summarizes the jobs that may be lost due to the US-China trade war, separated by county and industry.</p1>
+          <ul></ul>
         </div>
         <div class = 'row'>
           <input id='searchbar' autocomplete='on' text='text' placeholder="Search counties...">
         </div>
       </div>
       <div class = 'col'>
-        <h2 class = 'text'>This will be a histogram, ok?</h2>
+        <div id='hist'></div>
       </div>
     </div>
     <div class = 'row'>
       <div class = 'col-*-11'>
-        <svg width="960" height="600"></svg>
+        <div id="chor"></div>
+        <!-- <svg width="960" height="600"></svg> -->
       </div>
       <div class = 'col'>
         <div class="row-align-right">
@@ -80,6 +82,7 @@
 <!-- contents -->
 <script src='choropleth.js'></script>
 <script src='sliders.js'></script>
+<script src='scalebar.js'></script>
 <script src='global.js'></script>
 
 </body>

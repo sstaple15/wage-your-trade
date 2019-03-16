@@ -1,7 +1,15 @@
 function set_choropleth(geoJSON) {
+  d3.select('#chor')
+    .append('svg')
+    .attr('id', 'choropleth')
+    .attr('height', 600)
+    .attr('width', 960);
+
+  let choropleth = d3.select('#choropleth');
+
   var path = d3.geoPath();
   // adapted from https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
-  svg.append("g")
+  choropleth.append("g")
     .attr("class", "counties")
     .selectAll("path")
     .data(topojson.feature(geoJSON, geoJSON.objects.counties).features)
@@ -9,13 +17,16 @@ function set_choropleth(geoJSON) {
     .attr("d", path)
     .attr('class', 'feature');
 
-  svg.append("path")
+  choropleth.append("path")
       .datum(topojson.mesh(geoJSON, geoJSON.objects.states, function(a, b) { return a !== b; }))
       .attr("class", "states")
       .attr("d", path);
 }
 
 function update_choropleth (cty_jobs) {
+
+  let choropleth = d3.select('#choropleth');
+
   // create linear and color scales for choropleth
   const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
   const jobScale = d3.scaleLinear().domain([0, jobDomain.max]).range([0,1])
@@ -27,10 +38,19 @@ function update_choropleth (cty_jobs) {
       .offset([-10, 0])
       .direction('n')
       .html(function (d) {
-        text = cty_jobs[d.id].cty + '<br/>Supported Jobs Rate: ' + d3.format(',')(Math.round(cty_jobs[d.id][CURRENT_MET]));
+        text = cty_jobs[d.id].cty +
+          '<br/><strong>Total Jobs Rate: </strong>' + d3.format(',')(Math.round(cty_jobs[d.id][CURRENT_MET])) +
+          '<br/>Agriculture: ' + d3.format(',')(Math.round(cty_jobs[d.id]['agr'])) +
+          '<br/>Mining & Oil: ' + d3.format(',')(Math.round(cty_jobs[d.id]['min'])) +
+          '<br/>Manufacture: ' + d3.format(',')(Math.round(cty_jobs[d.id]['man'])) +
+          '<br/>Business: ' + d3.format(',')(Math.round(cty_jobs[d.id]['bus'])) +
+          '<br/>Finance: ' + d3.format(',')(Math.round(cty_jobs[d.id]['fin'])) +
+          '<br/>Info & Tech: ' + d3.format(',')(Math.round(cty_jobs[d.id]['its'])) +
+          '<br/>Education: ' + d3.format(',')(Math.round(cty_jobs[d.id]['edu'])) +
+          '<br/>Engineering: ' + d3.format(',')(Math.round(cty_jobs[d.id]['eng']));
         return text;
   });
-  svg.call(tip);
+  choropleth.call(tip);
 
   d3.selectAll('path')
     .on('mouseover', function(d) {
