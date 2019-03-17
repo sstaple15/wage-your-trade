@@ -12,8 +12,10 @@ promise
     return data;
   })
   .then(data => reformat(data))
-  .then(data => update_choropleth(data))
-  .then(data => update_scalebar(data));
+  .then(data => {
+    update_choropleth(data);
+    update_scalebar(data);
+  });
 
 // update cycle
 function update_scalars (sc, value) {
@@ -24,8 +26,10 @@ function update_scalars (sc, value) {
   });
   promise
   .then(data => reformat(data))
-  .then(data => update_choropleth(data))
-  .then(data => update_scalebar(data));
+  .then(data => {
+    update_choropleth(data);
+    update_scalebar(data);
+  });
 }
 
 // global scalars to start

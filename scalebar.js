@@ -8,7 +8,7 @@ function set_scalebar() {
 
 }
 
-function update_scalebar(cty_jobs) {
+async function update_scalebar(cty_jobs) {
 
   var scale_df = {};
 
@@ -21,6 +21,7 @@ function update_scalebar(cty_jobs) {
     };
 };
   // compile into bins listing
+  // this isnt working for some reason?
   const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
 
   Object.entries(cty_jobs).forEach(([id, value]) => {
@@ -31,47 +32,47 @@ function update_scalebar(cty_jobs) {
   });
 
   // now data to work with is scale_df
-  var data = Object.entries(scale_df).map(([key, val]) => {
-    return {'bin': +key, 'freq': +val.freq};
+  var data = Object.entries(scale_df).map(([key, value]) => {
+    return {'bin': +key, 'freq': +value.freq};
   });
 
   var histogram = d3.select('#histogram');
 
+// THIS IS WHERE THINGS ARE BREAKING DOWN
+
   // adapted from https://bl.ocks.org/caravinden/d04238c4c9770020ff6867ee92c7dac1
-  var x = d3.scaleLinear()
+  var x = d3.scaleBand()
       .domain(data.map((d) => d.bin))
-      .rangeRound([10, 410]);
+      .rangeRound([0, 300]);
 
   var y = d3.scaleLinear()
-      .domain(10, 0)
+      .domain(data.map((d) => d.freq), 0)
       .rangeRound([150, 0]);
 
-  // var color = d3.scaleLinear()
-  //     .domain([0,10])
-  //     .range(['#fff', '#ffffd9', '#edf8b1', '#c7e9b4',
-  //                 '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8',
-  //                 '#253494', '#081d58']);
+  var color = d3.scaleThreshold()
+       .domain([0,10])
+       .range(['#fff', '#ffffd9', '#edf8b1', '#c7e9b4',
+                   '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8',
+                   '#253494', '#081d58']);
 
   var g = histogram.append("g")
-      .attr("class", "key")
-      .attr("transform", "translate(0,135)");
+      .attr("transform", "translate(10,10)");
 
   g.append('g')
-      .attr('transform', 'translate(0,135)')
+      .attr('transform', 'translate(0,150)')
+      .attr('class', 'axis')
       .call(d3.axisBottom(x)
-              .tickValues([]))
+              .ticks(10))
+              // need to figure out what goes here
 
   g.selectAll("rect")
     .data(data)
     .enter().append('rect')
-    // .attr('fill', (d) => color(d.bin))
-    .attr("height", (d) => {
-      hgt = y(d.freq);
-        return hgt;
-    })
-    .attr("x", (d) => x(d.bin))
-    .attr('y', (d) => 150 - y(d.bin))
-    .attr("width", x.bandwidth());
+    // .attr('fill', (d) => color(d.bin)) //what is happening here?
+    .attr("height", (d) => y(d.freq))
+    .attr("x", (d) => x(d.bin) + 12)
+    .attr('y', (d) => y(d.freq) - 5)
+    .attr("width", 25);
 
 }
   // g.append("text")

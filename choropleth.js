@@ -23,9 +23,9 @@ function set_choropleth(geoJSON) {
       .attr("d", path);
 }
 
-function update_choropleth (cty_jobs) {
+async function update_choropleth (cty_jobs) {
 
-  let choropleth = d3.select('#choropleth');
+  var choropleth = d3.select('#choropleth');
 
   // create linear and color scales for choropleth
   const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
