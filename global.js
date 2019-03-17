@@ -6,13 +6,14 @@ promise = new Promise((resolve) => {
 
 promise
   .then((geoJSON) => {
-    set_scalebar();
     set_choropleth(geoJSON);
+    set_scalebar();
     data = d3.json("cty_stuff.json");
     return data;
   })
   .then(data => reformat(data))
-  .then(data => update_choropleth(data));
+  .then(data => update_choropleth(data))
+  .then(data => update_scalebar(data));
 
 // update cycle
 function update_scalars (sc, value) {
@@ -23,7 +24,8 @@ function update_scalars (sc, value) {
   });
   promise
   .then(data => reformat(data))
-  .then(data => update_choropleth(data));
+  .then(data => update_choropleth(data))
+  .then(data => update_scalebar(data));
 }
 
 // global scalars to start
@@ -68,6 +70,9 @@ function computeDomain(data, key) {
   });
   return {min: min, max: max};
 }
+
+// upon consultation with Justin Cohler
+// bins = (max, val, n = 100) => Math.trunc(val / max * buckets);
 
 // adapted from https://bl.ocks.org/mbostock/2206590
 // function clicked(d) {
