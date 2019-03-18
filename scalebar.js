@@ -9,7 +9,7 @@ function set_scalebar() {
 }
 
 async function update_scalebar(cty_jobs) {
-
+// upon consultation with Justin Cohler
   var scale_df = {};
 
   // first create a binned df for use in scalebar y
@@ -38,22 +38,23 @@ async function update_scalebar(cty_jobs) {
 
   var histogram = d3.select('#histogram');
 
-// THIS IS WHERE THINGS ARE BREAKING DOWN
-
+  // figure out max for scalebar scaling
+  const histDomain = computeDomain(data, 'freq');
+  console.log(histDomain.max);
   // adapted from https://bl.ocks.org/caravinden/d04238c4c9770020ff6867ee92c7dac1
   var x = d3.scaleBand()
       .domain(data.map((d) => d.bin))
-      .rangeRound([0, 300]);
+      .rangeRound([0, 400]);
 
   var y = d3.scaleLinear()
-      .domain(data.map((d) => d.freq), 0)
-      .rangeRound([150, 0]);
+      .domain([histDomain.max, 0])
+      .rangeRound([100, 0]);
 
-  var color = d3.scaleThreshold()
-       .domain([0,10])
-       .range(['#fff', '#ffffd9', '#edf8b1', '#c7e9b4',
-                   '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8',
-                   '#253494', '#081d58']);
+// THIS IS WHERE THINGS ARE BREAKING DOWN
+// scalebar height stuck, colors non-functional
+  var color = d3.scaleBand()
+       .domain([0, 1])
+       .range([(d) => d3.interpolateYlGnBu((d))]);
 
   var g = histogram.append("g")
       .attr("transform", "translate(10,10)");
@@ -62,25 +63,26 @@ async function update_scalebar(cty_jobs) {
       .attr('transform', 'translate(0,150)')
       .attr('class', 'axis')
       .call(d3.axisBottom(x)
-              .ticks(10))
-              // need to figure out what goes here
+              .ticks(11))
+              // need to figure out what goes here for tick values
 
   g.selectAll("rect")
     .data(data)
     .enter().append('rect')
-    // .attr('fill', (d) => color(d.bin)) //what is happening here?
-    .attr("height", (d) => y(d.freq))
-    .attr("x", (d) => x(d.bin) + 12)
-    .attr('y', (d) => y(d.freq) - 5)
-    .attr("width", 25);
+    .attr('fill', (d) => color(d.bin)) //what is happening here?
+    .attr("height", (d) => y(d.freq + histDomain.max*.05))
+    .attr("x", (d) => x(d.bin))
+    .attr('y', (d) => 145 - y(d.freq))
+    .attr("width", 35);
+
+    g.append("text")
+        .attr("class", "caption")
+        .attr("x", x.range()[0])
+        .attr("y", 185)
+        .attr("fill", "#555")
+        .attr("text-anchor", "start")
+        .attr('font-size', 12)
+        .attr("font-weight", "bold")
+        .text("Jobs Supported per 10,000 Employed");
 
 }
-  // g.append("text")
-  //     .attr("class", "caption")
-  //     .attr("x", x.range()[0])
-  //     .attr("y", 38)
-  //     .attr("fill", "#555")
-  //     .attr("text-anchor", "start")
-  //     .attr('font-size', 12)
-  //     .attr("font-weight", "bold")
-  //     .text("Jobs Supported per 10,000 Employed");

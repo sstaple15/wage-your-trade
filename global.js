@@ -75,9 +75,6 @@ function computeDomain(data, key) {
   return {min: min, max: max};
 }
 
-// upon consultation with Justin Cohler
-// bins = (max, val, n = 100) => Math.trunc(val / max * buckets);
-
 // adapted from https://bl.ocks.org/mbostock/2206590
 // function clicked(d) {
 //   if (active.node() === this) return reset();
