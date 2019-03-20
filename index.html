@@ -5,8 +5,7 @@
   <meta charset="utf-8">
   <title>Wage Your Trade War</title>
   <link rel='stylesheet' href='./style.css' />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -19,8 +18,11 @@
           <ul></ul>
         </div>
         <div class = 'row'>
-          <input id='searchbar' autocomplete='on' text='text' placeholder="Search counties...">
-          <button id='reset' value='Reset'>Reset</button>
+          <form id='countyListForm' autocomplete="on" onsubmit="return false">
+            <input id='searchbar' autocomplete='on' text='text' placeholder="Search counties..." list='countyList'>
+            <datalist id='countyList'></datalist>
+            <button id='reset' value='Reset'>Reset</button>
+          </form>
         </div>
       </div>
       <div class = 'col'>
@@ -76,15 +78,13 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-  crossorigin="anonymous"></script>
 
 <!-- contents -->
 <script src='choropleth.js'></script>
 <script src='sliders.js'></script>
 <script src='scalebar.js'></script>
 <script src='global.js'></script>
+<script src='searchlist.js'></script>
 
 </body>
 

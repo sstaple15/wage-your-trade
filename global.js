@@ -13,6 +13,7 @@ promise
   })
   .then(data => reformat(data))
   .then(data => {
+    make_search(data);
     update_choropleth(data);
     update_scalebar(data);
   });
