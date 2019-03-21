@@ -8,12 +8,18 @@ p {
 	font-weight: bold;
 }
 
+.footer{
+	font-size: 10px;
+	font-style: italic;
+}
+
 #hist {
 	display: flex;
 }
 
 .notbold {
 	font-weight: normal;
+	font-size: 14px;
 }
 
 .background {

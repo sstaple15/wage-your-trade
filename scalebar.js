@@ -21,11 +21,9 @@ function update_scalebar(cty_jobs) {
     };
   };
   // compile into bins listing
-  // this isnt working for some reason?
-  const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
-
+  // const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
   Object.entries(cty_jobs).forEach(([id, value]) => {
-    bin = Math.trunc((value.ind/jobDomain.max)*10);
+    bin = Math.trunc((value.ind/5000)*10);
     if (bin) {
       scale_df[bin].freq++;
     }
@@ -33,7 +31,7 @@ function update_scalebar(cty_jobs) {
 
   // now data to work with is scale_df
   var data = Object.entries(scale_df).map(([key, value]) => {
-    return {'bin': +key, 'freq': +value.freq};
+    return {'bin': +key*10, 'freq': +value.freq};
   });
 
   var histogram = d3.select('#histogram');
@@ -52,18 +50,20 @@ function update_scalebar(cty_jobs) {
 
   var color = d3.scaleLinear()
        .domain(data.map((d) => d.bin))
-       .range(data.map((d) => d3.interpolateYlGnBu(d.bin * 0.1)));
+       .range(data.map((d) => d3.interpolateYlGnBu(d.bin * 0.01)));
 
   var g = histogram.append("g")
       .attr("transform", "translate(10,10)");
 
   d3.selectAll('.mainAxis').remove();
   g.append('g')
-    .attr('transform', 'translate(0,150)')
+    .attr('transform', 'translate(17,150)')
     .attr('class', 'mainAxis')
     .call(d3.axisBottom(x)
-      .ticks(11));
-              // need to figure out what goes here for tick values
+      .ticks(10)
+      .tickFormat((d) => d + "%"))
+    .select('.domain')
+      .remove();
 
   // FIX: gets rid of old bars, allows new bars to form
   d3.selectAll('rect').remove();
@@ -77,6 +77,14 @@ function update_scalebar(cty_jobs) {
     .attr('y', (d) => 145 - y(d.freq))
     .attr("width", 38);
 
+  g.append('line')
+    .attr('transform', 'translate(0, 150)')
+    .attr('stroke', 'black')
+    .attr('x1', 0)
+    .attr('x2', 398)
+    .attr('y1', 0)
+    .attr('y2', 0);
+
   d3.selectAll('.caption').remove();
   g.append("text")
     .attr("class", "caption")
@@ -86,6 +94,6 @@ function update_scalebar(cty_jobs) {
     .attr("text-anchor", "start")
     .attr('font-size', 12)
     .attr("font-weight", "bold")
-    .text("Jobs Supported per 10,000 Employed");
+    .text("Jobs Seriously Impacted by Tariffs");
 
 }

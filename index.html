@@ -14,7 +14,10 @@
       <div class = 'col-7'>
         <div class = 'row'>
           <h1 class = 'title'>Wage Your Trade War</h1>
-          <p class = 'notbold'>Using data from the National Industry Survey, Bureau of Labor Statistics, and estimates from the Brookings Institute, this interactive summarizes the jobs vulnerable to a trade war. Explore tariff rates to see who loses out most from protectionist policy, down to your own state and county.</p1>
+          <p class = 'notbold'>Trade wars and the tariffs they bring are far more than national distraction - they are
+             real wars on household jobs and industries. Using data from the Brookings Institute, this tool estimates the
+             number of jobs made vulnerable to loss by tariffs. Explore tariff rates - starting with those in March 2019 -
+             to see who loses out from protectionist policies, down to your own county. Wage your own trade war to see which states get the most from trade.</p1>
           <ul></ul>
         </div>
         <div class = 'row'>
@@ -25,7 +28,7 @@
           </form>
         </div>
       </div>
-      <div class = 'col'>
+      <div class = 'col-5'>
         <div id='hist'></div>
       </div>
     </div>
@@ -36,7 +39,7 @@
       </div>
       <div class = 'col'>
         <div class="row-align-right">
-            <h5>Play with Tariff Rates:</h5>
+            <h5>Tariffs by Industry:</h5>
             <p> <font size = '2.5'>Agriculture, Forestry, & Fishing</font></p>
             <div id="slider_a"></div>
         </div>
@@ -69,6 +72,16 @@
             <div id="slider_h"></div>
         </div>
       </div>
+    </div>
+    <div class='footer'>
+      <p class='notbold'><strong>Source:</strong> Personally <a href='https://github.com/sstaple15/wage-your-trade'>
+        consolidated estimates</a> using data from the National Industry Survey (US Bureau of Labor Statistics) and
+        metrics from the <a href='https://app.box.com/s/1cre7f522ml6mwpp8l854lh5h0x6gjj2'>Brookings Institute</a>.</p1>
+      <p class='notbold'><strong>Methodology:</strong> We estimate trade exposure as a percentage of total area
+        employment by consolidating county- and industry-specific estimates from the Brookings Institute<br/>over years
+        2012-2018. This is then crossed with total exports per industry to create pseudo-supply curves. From these, the
+        impact of trade tariffs is linearly estimated. This<br/>process does allow some instances when total jobs
+        impacted may exceed 100% - this is due to firm over-reporting of employment for headquarter locations.</p>
     </div>
   </div>
 

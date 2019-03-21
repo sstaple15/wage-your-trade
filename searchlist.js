@@ -3,7 +3,6 @@ var countySet = {};
 function make_search(cty_stuff) {
 
   var countyPossible = {};
-  var countyPossible = cty_stuff.cty_name;
   console.log(countyPossible);
 
   // info for searchlist

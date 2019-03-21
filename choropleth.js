@@ -28,8 +28,8 @@ async function update_choropleth (cty_jobs) {
   var choropleth = d3.select('#choropleth');
 
   // create linear and color scales for choropleth
-  const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
-  const jobScale = d3.scaleLinear().domain([0, jobDomain.max]).range([0,1])
+  // const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
+  const jobScale = d3.scaleLinear().domain([0, 5000]).range([0,1])
   const colorScale = d => d3.interpolateYlGnBu((2*jobScale(d)));
 
   // create tooltip
@@ -39,15 +39,16 @@ async function update_choropleth (cty_jobs) {
       .direction('n')
       .html(function (d) {
         text = cty_jobs[d.id].cty +
-          '<br/><strong>Total Jobs Rate: </strong>' + d3.format(',')(Math.round(cty_jobs[d.id][CURRENT_MET])) +
-          '<br/>Agriculture: ' + d3.format(',')(Math.round(cty_jobs[d.id]['agr'])) +
-          '<br/>Mining & Oil: ' + d3.format(',')(Math.round(cty_jobs[d.id]['min'])) +
-          '<br/>Manufacture: ' + d3.format(',')(Math.round(cty_jobs[d.id]['man'])) +
-          '<br/>Business: ' + d3.format(',')(Math.round(cty_jobs[d.id]['bus'])) +
-          '<br/>Finance: ' + d3.format(',')(Math.round(cty_jobs[d.id]['fin'])) +
-          '<br/>Info & Tech: ' + d3.format(',')(Math.round(cty_jobs[d.id]['its'])) +
-          '<br/>Education: ' + d3.format(',')(Math.round(cty_jobs[d.id]['edu'])) +
-          '<br/>Engineering: ' + d3.format(',')(Math.round(cty_jobs[d.id]['eng']));
+          '<br/><strong>Jobs Seriously Impacted: </strong>' + (Math.round(cty_jobs[d.id][CURRENT_MET])/100) + '%' +
+          '<br/><strong>Breakdown by Industry (%): </strong>' +
+          '<br/>Agriculture: ' + (Math.round(cty_jobs[d.id]['agr'])/100) +
+          '<br/>Mining & Oil: ' + (Math.round(cty_jobs[d.id]['min'])/100) +
+          '<br/>Manufacture: ' + (Math.round(cty_jobs[d.id]['man'])/100) +
+          '<br/>Business: ' + (Math.round(cty_jobs[d.id]['bus'])/100) +
+          '<br/>Finance: ' + (Math.round(cty_jobs[d.id]['fin'])/100) +
+          '<br/>Info & Tech: ' + (Math.round(cty_jobs[d.id]['its'])/100) +
+          '<br/>Education: ' + (Math.round(cty_jobs[d.id]['edu'])/100) +
+          '<br/>Engineering: ' + (Math.round(cty_jobs[d.id]['eng'])/100) ;
         return text;
   });
   choropleth.call(tip);
