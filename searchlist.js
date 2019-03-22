@@ -1,47 +1,46 @@
-var countySet = {};
+  var countyList = new Set();
 
 function make_search(cty_stuff) {
 
-  var countyPossible = {};
-  console.log(countyPossible);
+  // create countySet
+  var countySet = [];
+  Object.entries(cty_stuff).forEach(([id, value]) => {
+    cty = String(value.cty);
+    countySet.push(cty);
+  });
 
-  // info for searchlist
+  // connect to searchbar
   d3.select('#countyList')
     .selectAll('option')
-    .data(cty_stuff)
-    .enter().append('option')
-    .attr('value', function (d) {
-      return d.cty_name;
-    });
+    .data(countySet)
+    .join('option')
+    .attr('value', function(d) { return d; });
 
-  // then, handle the searchbar function in countyListForm
   d3.select('#countyListForm')
-    .on('submit', function () {
-      var searched = document.getElementById('searchbar').value
-      searcher(searched);
-      document.getElementById('countyListForm')
-        .reset()
+    .on("submit", function() {
+      var searched = document.getElementById('searchbar').value;
+      countyList.add(searched);
+      findCounty(countyList);
+      document.getElementById('searchbar').value = '';
     });
 
-  function searcher (searched) {
-    if (countyPossible.includes(searched)) {
-      countySet.add(searched);
-      console.log(countySet);
-      // searcherHandler(countySet);
-    }
+  function findCounty(set) {
+    listValues = Array.from(set);
+    console.log(String(listValues));
+    Object.entries(cty_stuff).forEach(([id, value]) => {
+      cty = String(value.cty);
+      if (cty == listValues) {
+        console.log('true');
+      }
+    });
   }
-
-  // this is going to be how I set tooltip
-  // function searcherHandler (set) {
-  //   listValues = Array.from(set)
-  // }
 
   // reset button functionality
   d3.select("#reset")
     .style("cursor", "pointer")
     .on("click", function() {
-      countySet.clear();
-      searcherHandler(countySet);
+      countyList.clear();
+      findCounty(countyList);
     });
 
 }

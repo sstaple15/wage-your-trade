@@ -30,7 +30,7 @@ async function update_choropleth (cty_jobs) {
   // create linear and color scales for choropleth
   // const jobDomain = computeDomain(cty_jobs, CURRENT_MET);
   const jobScale = d3.scaleLinear().domain([0, 5000]).range([0,1])
-  const colorScale = d => d3.interpolateYlGnBu((2*jobScale(d)));
+  const colorScale = d => d3.interpolateYlGnBu(2*(jobScale(d)));
 
   // create tooltip
   tip = d3.tip()

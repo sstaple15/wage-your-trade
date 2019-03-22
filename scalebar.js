@@ -31,7 +31,7 @@ function update_scalebar(cty_jobs) {
 
   // now data to work with is scale_df
   var data = Object.entries(scale_df).map(([key, value]) => {
-    return {'bin': +key*10, 'freq': +value.freq};
+    return {'bin': +key*5, 'freq': +value.freq};
   });
 
   var histogram = d3.select('#histogram');
@@ -50,7 +50,7 @@ function update_scalebar(cty_jobs) {
 
   var color = d3.scaleLinear()
        .domain(data.map((d) => d.bin))
-       .range(data.map((d) => d3.interpolateYlGnBu(d.bin * 0.01)));
+       .range(data.map((d) => d3.interpolateYlGnBu(d.bin * 0.02)));
 
   var g = histogram.append("g")
       .attr("transform", "translate(10,10)");
@@ -94,6 +94,6 @@ function update_scalebar(cty_jobs) {
     .attr("text-anchor", "start")
     .attr('font-size', 12)
     .attr("font-weight", "bold")
-    .text("Jobs Seriously Impacted by Tariffs");
+    .text("Jobs Seriously Impacted by Tariffs (%)");
 
 }
